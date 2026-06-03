@@ -5,6 +5,7 @@ import br.com.ifba.empresa.dto.EmpresaPostRequestDto;
 import br.com.ifba.empresa.entity.Empresa;
 import br.com.ifba.empresa.service.EmpresaIService;
 import br.com.ifba.infraestructure.util.ObjectMapperUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

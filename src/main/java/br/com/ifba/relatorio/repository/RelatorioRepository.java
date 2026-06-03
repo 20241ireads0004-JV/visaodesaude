@@ -1,4 +1,4 @@
 package br.com.ifba.relatorio.repository;
 
-public class RelatorioRepository {
+public interface RelatorioRepository {
 }

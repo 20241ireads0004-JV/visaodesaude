@@ -1,4 +1,4 @@
 package br.com.ifba.painelcorporativo.repository;
 
-public class PainelCorporativoRepository {
+public interface PainelCorporativoRepository {
 }

@@ -1,4 +1,4 @@
 package br.com.ifba.projecaosaude.repository;
 
-public class ProjecaoSaudeRepository {
+public interface ProjecaoSaudeRepository {
 }

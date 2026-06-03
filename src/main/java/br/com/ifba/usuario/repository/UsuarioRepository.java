@@ -1,4 +1,4 @@
 package br.com.ifba.usuario.repository;
 
-public class UsuarioRepository {
+public interface UsuarioRepository {
 }

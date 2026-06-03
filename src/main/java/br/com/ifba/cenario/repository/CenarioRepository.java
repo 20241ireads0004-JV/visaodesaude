@@ -1,4 +1,4 @@
 package br.com.ifba.cenario.repository;
 
-public class CenarioRepository {
+public interface CenarioRepository {
 }
