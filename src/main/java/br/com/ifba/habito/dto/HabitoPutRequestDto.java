@@ -16,7 +16,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class HabitoPostRequestDto implements Serializable {
+public class HabitoPutRequestDto implements Serializable {
 
     @NotNull(message = "A data é obrigatória")
     @JsonProperty("data")

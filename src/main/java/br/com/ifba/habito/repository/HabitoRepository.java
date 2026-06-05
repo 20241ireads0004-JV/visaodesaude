@@ -1,4 +1,10 @@
 package br.com.ifba.habito.repository;
 
-public interface HabitoRepository {
+import br.com.ifba.habito.entity.Habito;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface HabitoRepository extends JpaRepository<Habito, Long> {
+
 }

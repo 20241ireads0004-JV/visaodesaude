@@ -20,7 +20,7 @@ public class ObjectMapperUtil {
                 .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
     }
 
-    public <Input, Output> Output map(final Input object, final Class<Output> clazz) {
+    public static <Input, Output> Output map(final Input object, final Class<Output> clazz) {
         // Agora o método só faz o trabalho de converter, ficando super rápido.
         return MODEL_MAPPER.map(object, clazz);
     }
