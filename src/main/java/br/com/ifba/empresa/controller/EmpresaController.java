@@ -9,10 +9,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/empresas")
@@ -36,6 +35,42 @@ public class EmpresaController {
 
         // Retorna HTTP 201 (Created) e o DTO para o frontend
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EmpresaGetResponseDto> editar(
+            @PathVariable Long id,
+            @Valid @RequestBody EmpresaPostRequestDto requestDto) {
+
+        Empresa empresa = objectMapperUtil.map(requestDto, Empresa.class);
+        Empresa atualizada = empresaService.editarEmpresa(id, empresa);
+        EmpresaGetResponseDto responseDto = objectMapperUtil.map(atualizada, EmpresaGetResponseDto.class);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+
+        empresaService.excluirEmpresa(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<EmpresaGetResponseDto>> listar() {
+
+        List<EmpresaGetResponseDto> lista = empresaService.listar()
+                .stream()
+                .map(e -> objectMapperUtil.map(e, EmpresaGetResponseDto.class))
+                .toList();
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EmpresaGetResponseDto> buscarPorId(@PathVariable Long id) {
+
+        Empresa empresa = empresaService.buscarPorId(id);
+        EmpresaGetResponseDto responseDto = objectMapperUtil.map(empresa, EmpresaGetResponseDto.class);
+        return ResponseEntity.ok(responseDto);
     }
 
 
