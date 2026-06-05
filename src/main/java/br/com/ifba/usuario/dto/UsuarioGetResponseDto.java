@@ -1,4 +1,23 @@
 package br.com.ifba.usuario.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UsuarioGetResponseDto {
+
+    private Long id;
+
+    private String nome;
+
+    private String email;
+
+    private Integer idade;
+
+    private String sexo;
+
+    private String nomeEmpresa;
 }

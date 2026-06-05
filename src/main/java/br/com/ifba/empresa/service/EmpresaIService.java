@@ -4,5 +4,5 @@ import br.com.ifba.empresa.entity.Empresa;
 
 public interface EmpresaIService {
 
-    public Empresa cadastrarEmpresa(Empresa empresa);
+    Empresa cadastrarEmpresa(Empresa empresa);
 }

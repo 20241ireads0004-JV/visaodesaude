@@ -26,9 +26,9 @@ public class Usuario {
     @Column(nullable = false)
     private String senha;
 
-    private int idade;
+    private Integer idade;
 
-    private char sexo;
+    private String sexo;
 
     // Regra de Negócio: Chave Estrangeira obrigatória para Empresa
     @ManyToOne
