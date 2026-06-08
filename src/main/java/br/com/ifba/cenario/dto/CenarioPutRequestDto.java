@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CenarioPostRequestDto implements Serializable {
+public class CenarioPutRequestDto implements Serializable {
 
     @NotBlank(message = "O tipo é obrigatório.")
     @Size(max = 50, message = "O tipo deve possuir no máximo 50 caracteres.")
