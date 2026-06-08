@@ -10,7 +10,7 @@ import br.com.ifba.infraestructure.entity.PersistenceEntity;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "alertas")
+@Table(name = "cenarios")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
