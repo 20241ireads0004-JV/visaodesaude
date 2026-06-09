@@ -1,6 +1,7 @@
 package br.com.ifba.usuario.entity;
 
 import br.com.ifba.empresa.entity.Empresa;
+import br.com.ifba.infraestructure.entity.PersistenceEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,10 +13,9 @@ import lombok.NoArgsConstructor;
 @Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario {
+public class Usuario extends PersistenceEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true)
     private Long id;
 
     @Column(nullable = false)

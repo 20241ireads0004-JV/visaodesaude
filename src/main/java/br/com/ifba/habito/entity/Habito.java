@@ -18,8 +18,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 public class Habito extends PersistenceEntity implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "id_habito", nullable = false, unique = true)
     private Long idHabito;
 

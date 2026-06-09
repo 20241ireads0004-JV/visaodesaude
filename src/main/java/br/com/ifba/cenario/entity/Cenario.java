@@ -16,8 +16,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class Cenario extends PersistenceEntity implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+
     @Column(name = "id_cenario", nullable = false, unique = true)
     private Long idCenario;
 

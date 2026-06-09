@@ -18,8 +18,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = false)
 public class Alerta extends PersistenceEntity implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "id_alerta", nullable = false, unique = true)
     private Long idAlerta;
 
