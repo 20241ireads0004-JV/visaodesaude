@@ -13,9 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Empresa extends PersistenceEntity {
 
-
-    private Long idEmpresa;
-
     @Column(nullable = false)
     private String nome;
 }

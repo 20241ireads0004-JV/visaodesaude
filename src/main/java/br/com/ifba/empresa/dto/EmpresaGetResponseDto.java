@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EmpresaGetResponseDto {
 
-    private Long idEmpresa;
+    private Long id;
     private String nome;
+
 }
