@@ -3,6 +3,7 @@ package br.com.ifba.usuario.service;
 import br.com.ifba.empresa.entity.Empresa;
 import br.com.ifba.empresa.repository.EmpresaRepository;
 import br.com.ifba.infraestructure.exception.BusinessException;
+import br.com.ifba.usuario.dto.VincularFuncionarioRequestDto;
 import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -23,29 +24,24 @@ public class UsuarioService implements UsuarioIService{
 
     @Override
     @Transactional
-    public Usuario cadastrar(Usuario usuario, Long idEmpresa) {
+    public Usuario cadastrar(Usuario usuario) {
 
-        //Busca Empresa pelo Id
-        Empresa empresa = empresaRepository.findById(idEmpresa)
-                .orElseThrow(() -> new BusinessException("Empresa não encontrada. ID " + idEmpresa));
-
-        //Verfica se o email ja existe
+        // Verifica email
         if (usuarioRepository.existsByEmail(usuario.getEmail())){
             throw new BusinessException("Email ja cadastrado no sistema");
         }
 
-        // Criptografa a senha antes de salvar
+        // Criptografa senha
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
 
-        //Vincula Empresa a usuario
-        usuario.setEmpresa(empresa);
+        usuario.setEmpresa(null);
 
         return usuarioRepository.save(usuario);
     }
 
     @Override
     @Transactional
-    public Usuario editar(Long id, Usuario usuario, Long idEmpresa) {
+    public Usuario editar(Long id, Usuario usuario) {
 
         // Busca o usuário existente
         Usuario usuarioExistente = usuarioRepository.findById(id)
@@ -58,10 +54,6 @@ public class UsuarioService implements UsuarioIService{
             }
         }
 
-        // Busca a empresa
-        Empresa empresa = empresaRepository.findById(idEmpresa)
-                .orElseThrow(() -> new BusinessException("Empresa não encontrada. ID: " + idEmpresa));
-
         // Atualiza os campos
         usuarioExistente.setNome(usuario.getNome());
         usuarioExistente.setEmail(usuario.getEmail());
@@ -73,7 +65,7 @@ public class UsuarioService implements UsuarioIService{
 
         usuarioExistente.setIdade(usuario.getIdade());
         usuarioExistente.setSexo(usuario.getSexo());
-        usuarioExistente.setEmpresa(empresa);
+
         return usuarioRepository.save(usuarioExistente);
     }
 
@@ -95,5 +87,26 @@ public class UsuarioService implements UsuarioIService{
     public Usuario buscarPorId(Long id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("Usuario não encontrado. ID: " + id));
+    }
+
+    @Override
+    @Transactional
+    public void vincularPorCodigo(Long usuarioId, VincularFuncionarioRequestDto dto) {
+
+        if (dto.getCodigoEmpresa() == null || dto.getCodigoEmpresa().isBlank()) {
+            throw new BusinessException("Código da empresa é obrigatório");
+        }
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
+
+        if (usuario.getEmpresa() != null) {
+            throw new BusinessException("Usuário já está vinculado a uma empresa");
+        }
+
+        Empresa empresa = empresaRepository.findByCodigoAcesso(dto.getCodigoEmpresa())
+                .orElseThrow(() -> new BusinessException("Código da empresa inválido"));
+
+        usuario.setEmpresa(empresa);
     }
 }

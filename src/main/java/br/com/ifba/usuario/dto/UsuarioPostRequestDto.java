@@ -24,5 +24,4 @@ public class UsuarioPostRequestDto {
     @NotBlank(message = "Sexo é obrigatório")
     private String sexo;
 
-    private Long idEmpresa;
 }

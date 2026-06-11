@@ -37,5 +37,6 @@ public class Usuario extends PersistenceEntity {
     @JoinColumn(name = "empresa_id", nullable = true)
     private Empresa empresa;
 
+    private Boolean gestor = false;
 
 }

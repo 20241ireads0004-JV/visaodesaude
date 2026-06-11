@@ -3,6 +3,7 @@ package br.com.ifba.usuario.controller;
 import br.com.ifba.infraestructure.util.ObjectMapperUtil;
 import br.com.ifba.usuario.dto.UsuarioGetResponseDto;
 import br.com.ifba.usuario.dto.UsuarioPostRequestDto;
+import br.com.ifba.usuario.dto.VincularFuncionarioRequestDto;
 import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.service.UsuarioIService;
 import jakarta.validation.Valid;
@@ -33,11 +34,14 @@ public class UsuarioController {
         usuario.setSexo(requestDto.getSexo());
 
         //Passa a entidade e o id da Empresa pro Service
-        Usuario salvo = usuarioService.cadastrar(usuario, requestDto.getIdEmpresa());
+        Usuario salvo = usuarioService.cadastrar(usuario);
 
         // Converte Entidade → DTO de resposta
         UsuarioGetResponseDto responseDto = objectMapperUtil.map(salvo, UsuarioGetResponseDto.class);
-        responseDto.setNomeEmpresa(salvo.getEmpresa().getNome());
+
+        if (salvo.getEmpresa() != null) {
+            responseDto.setNomeEmpresa(salvo.getEmpresa().getNome());
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
@@ -54,10 +58,13 @@ public class UsuarioController {
         usuario.setIdade(requestDto.getIdade());
         usuario.setSexo(requestDto.getSexo());
 
-        Usuario atualizado = usuarioService.editar(id, usuario, requestDto.getIdEmpresa());
+        Usuario atualizado = usuarioService.editar(id, usuario);
 
         UsuarioGetResponseDto responseDto = objectMapperUtil.map(atualizado, UsuarioGetResponseDto.class);
-        responseDto.setNomeEmpresa(atualizado.getEmpresa().getNome());
+
+        if (atualizado.getEmpresa() != null) {
+            responseDto.setNomeEmpresa(atualizado.getEmpresa().getNome());
+        }
 
         return ResponseEntity.ok(responseDto);
 
@@ -75,18 +82,40 @@ public class UsuarioController {
                 .stream()
                 .map(u -> {
                     UsuarioGetResponseDto dto = objectMapperUtil.map(u, UsuarioGetResponseDto.class);
-                    dto.setNomeEmpresa(u.getEmpresa().getNome());
+                    if (u.getEmpresa() != null) {
+                        dto.setNomeEmpresa(u.getEmpresa().getNome());
+                    }else{
+                        dto.setNomeEmpresa(null);
+                    }
+
                     return dto;
                 })
                 .toList();
+
         return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioGetResponseDto> buscarPorId(@PathVariable Long id) {
         Usuario usuario = usuarioService.buscarPorId(id);
+
         UsuarioGetResponseDto responseDto = objectMapperUtil.map(usuario, UsuarioGetResponseDto.class);
-        responseDto.setNomeEmpresa(usuario.getEmpresa().getNome());
+
+        if (usuario.getEmpresa() != null) {
+            responseDto.setNomeEmpresa(usuario.getEmpresa().getNome());
+        } else {
+            responseDto.setNomeEmpresa(null);
+        }
+
         return ResponseEntity.ok(responseDto);
+    }
+
+    @PutMapping("/{usuarioId}/vincular")
+    public ResponseEntity<Void> vincularFuncionario(
+            @PathVariable Long usuarioId,
+            @Valid @RequestBody VincularFuncionarioRequestDto dto) {
+
+        usuarioService.vincularPorCodigo(usuarioId, dto);
+        return ResponseEntity.noContent().build();
     }
 }

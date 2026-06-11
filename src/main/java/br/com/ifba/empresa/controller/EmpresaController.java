@@ -29,19 +29,12 @@ public class EmpresaController {
     @PostMapping("/cadastrar")
     public ResponseEntity<EmpresaGetResponseDto> cadastrar(@Valid @RequestBody EmpresaPostRequestDto requestDto, @RequestParam Long usuarioId) {
 
-        // Converte DTO para Entidade
         Empresa empresa = objectMapperUtil.map(requestDto, Empresa.class);
 
-        // Salva a empresa e gera o código
         Empresa empresaSalva = empresaService.cadastrarEmpresa(empresa, usuarioId);
 
-        // Converte a Entidade salva de volta para o DTO de resposta
-        EmpresaGetResponseDto responseDto = objectMapperUtil.map(empresaSalva, EmpresaGetResponseDto.class);
-
-        // Seta os valores exatos que você quer retornar no Postman
-        responseDto.setNome(empresaSalva.getNome());
-        responseDto.setCodigoAcesso(empresaSalva.getCodigoAcesso());
-        responseDto.setGestor(true);
+        EmpresaGetResponseDto responseDto =
+                objectMapperUtil.map(empresaSalva, EmpresaGetResponseDto.class);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
@@ -53,7 +46,10 @@ public class EmpresaController {
 
         Empresa empresa = objectMapperUtil.map(requestDto, Empresa.class);
         Empresa atualizada = empresaService.editarEmpresa(id, empresa);
-        EmpresaGetResponseDto responseDto = objectMapperUtil.map(atualizada, EmpresaGetResponseDto.class);
+
+        EmpresaGetResponseDto responseDto =
+                objectMapperUtil.map(atualizada, EmpresaGetResponseDto.class);
+
         return ResponseEntity.ok(responseDto);
     }
 
