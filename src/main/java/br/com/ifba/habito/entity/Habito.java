@@ -1,5 +1,6 @@
 package br.com.ifba.habito.entity;
 
+import br.com.ifba.usuario.entity.Usuario;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,10 +19,6 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 public class Habito extends PersistenceEntity implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_habito", nullable = false, unique = true)
-    private Long idHabito;
 
     @Column(name = "data", nullable = false)
     private Date data;
@@ -43,4 +40,8 @@ public class Habito extends PersistenceEntity implements Serializable {
 
     @Column(name = "exercicio_duracao", nullable = false)
     private int exercicioDuracao;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
 }

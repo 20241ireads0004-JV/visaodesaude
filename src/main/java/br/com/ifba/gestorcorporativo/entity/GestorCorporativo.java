@@ -1,10 +1,7 @@
 package br.com.ifba.gestorcorporativo.entity;
 
 import br.com.ifba.usuario.entity.Usuario;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GestorCorporativo extends Usuario {
 
-    // Código corporativo exclusivo do Gestor/RH
+
     @Column(nullable = false, unique = true)
     private Long idGestor;
 }

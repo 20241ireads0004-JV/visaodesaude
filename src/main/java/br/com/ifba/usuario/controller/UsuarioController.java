@@ -21,7 +21,7 @@ public class UsuarioController {
     private final UsuarioIService usuarioService;
     private final ObjectMapperUtil objectMapperUtil;
 
-    @PostMapping
+    @PostMapping("/cadastrar")
     public ResponseEntity<UsuarioGetResponseDto> cadastrar(@Valid @RequestBody UsuarioPostRequestDto requestDto){
 
         //Converte o DTO para entidade

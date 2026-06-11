@@ -1,6 +1,7 @@
 package br.com.ifba.usuario.entity;
 
 import br.com.ifba.empresa.entity.Empresa;
+import br.com.ifba.infraestructure.entity.PersistenceEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,11 +13,8 @@ import lombok.NoArgsConstructor;
 @Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario {
+public class Usuario extends PersistenceEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @Column(nullable = false)
     private String nome;
@@ -27,13 +25,16 @@ public class Usuario {
     @Column(nullable = false)
     private String senha;
 
+    @Column(nullable = true)
+    private String departamento; // preenchido quando o funcionário se vincula
+
     private Integer idade;
 
     private String sexo;
 
     // Regra de Negócio: Chave Estrangeira obrigatória para Empresa
     @ManyToOne
-    @JoinColumn(name = "empresa_id", nullable = false)
+    @JoinColumn(name = "empresa_id", nullable = true)
     private Empresa empresa;
 
 
