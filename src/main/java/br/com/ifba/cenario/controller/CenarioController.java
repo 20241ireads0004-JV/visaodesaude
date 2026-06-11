@@ -2,7 +2,6 @@ package br.com.ifba.cenario.controller;
 
 import br.com.ifba.cenario.dto.CenarioGetResponseDto;
 import br.com.ifba.cenario.dto.CenarioPostRequestDto;
-import br.com.ifba.cenario.dto.CenarioPutRequestDto;
 import br.com.ifba.cenario.entity.Cenario;
 import br.com.ifba.cenario.service.CenarioIService;
 import br.com.ifba.infraestructure.util.ObjectMapperUtil;
@@ -112,7 +111,7 @@ public class CenarioController {
     )
     public ResponseEntity<CenarioGetResponseDto> update(
             @PathVariable Long id,
-            @RequestBody @Valid CenarioPutRequestDto dto
+            @RequestBody @Valid CenarioPostRequestDto dto
     ) {
 
         Cenario cenario = ObjectMapperUtil.map(
