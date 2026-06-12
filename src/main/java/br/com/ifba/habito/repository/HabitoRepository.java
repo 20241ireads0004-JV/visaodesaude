@@ -1,12 +1,17 @@
 package br.com.ifba.habito.repository;
 
+import br.com.ifba.empresa.entity.Empresa;
 import br.com.ifba.habito.entity.Habito;
+import br.com.ifba.relatorio.entity.Relatorio;
+import br.com.ifba.usuario.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface HabitoRepository extends JpaRepository<Habito, Long> {
@@ -63,4 +68,7 @@ public interface HabitoRepository extends JpaRepository<Habito, Long> {
                 GROUP BY u.departamento
             """, nativeQuery = true)
     List<Object[]> calcularRiscoPorDepartamento(@Param("empresaId") Long empresaId);
+
+    List<Habito> findByUsuario_IdAndDataBetweenOrderByDataAsc(Long usuarioId, Date dataInicio, Date dataFim);
+
 }

@@ -76,7 +76,7 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
+    @GetMapping("/listar")
     public ResponseEntity<List<UsuarioGetResponseDto>> listar() {
         List<UsuarioGetResponseDto> lista = usuarioService.listar()
                 .stream()

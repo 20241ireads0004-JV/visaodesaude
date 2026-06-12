@@ -1,5 +1,6 @@
 package br.com.ifba.projecaosaude.entity;
 
+import br.com.ifba.usuario.entity.Usuario;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,4 +31,8 @@ public class ProjecaoSaude extends PersistenceEntity implements Serializable {
 
     @Column(name = "visualizacao", nullable = false)
     private Boolean visualizacao;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
 }
