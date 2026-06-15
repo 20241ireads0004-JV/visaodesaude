@@ -21,7 +21,6 @@ public class UsuarioPostRequestDto {
     @Min(value = 1, message = "Idade inválida")
     private Integer idade;
 
-    @NotBlank(message = "Sexo é obrigatório")
-    private String sexo;
+    private String sexoBiologico;
 
 }

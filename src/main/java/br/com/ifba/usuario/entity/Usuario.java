@@ -30,7 +30,7 @@ public class Usuario extends PersistenceEntity {
 
     private Integer idade;
 
-    private String sexo;
+    private String sexoBiologico;
 
     // Regra de Negócio: Chave Estrangeira obrigatória para Empresa
     @ManyToOne

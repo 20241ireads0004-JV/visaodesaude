@@ -10,7 +10,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.List;
 
 @Service
@@ -41,6 +41,30 @@ public class UsuarioService implements UsuarioIService{
 
     @Override
     @Transactional
+    public Usuario autenticarLogin(String email, String senha) {
+
+        Usuario usuario = usuarioRepository.findByEmail(email);
+
+        if (usuario != null) {
+            System.out.println("✅ USUÁRIO ENCONTRADO");
+
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+            if (encoder.matches(senha, usuario.getSenha())) {
+                System.out.println("Senha correta, Login aprovado.");
+                return usuario;
+            } else {
+                System.out.println("Senha Icorreta");
+            }
+        } else {
+            System.out.println("Email inexistente");
+        }
+
+        return null;
+    }
+
+    @Override
+    @Transactional
     public Usuario editar(Long id, Usuario usuario) {
 
         // Busca o usuário existente
@@ -64,7 +88,7 @@ public class UsuarioService implements UsuarioIService{
         }
 
         usuarioExistente.setIdade(usuario.getIdade());
-        usuarioExistente.setSexo(usuario.getSexo());
+        usuarioExistente.setSexoBiologico(usuario.getSexoBiologico());
 
         return usuarioRepository.save(usuarioExistente);
     }

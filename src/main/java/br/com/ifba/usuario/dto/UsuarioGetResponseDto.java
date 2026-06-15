@@ -17,7 +17,7 @@ public class UsuarioGetResponseDto {
 
     private Integer idade;
 
-    private String sexo;
+    private String sexoBiologico;
 
     private String nomeEmpresa;
 }

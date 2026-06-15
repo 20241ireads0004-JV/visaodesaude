@@ -23,4 +23,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
      * Usado quando o gestor aplica o filtro de departamento no painel.
      */
     List<Usuario> findByEmpresaIdAndDepartamento(Long idEmpresa, String departamento);
+
+    Usuario findByEmail(String email);
 }

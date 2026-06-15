@@ -31,7 +31,7 @@ public class GestorCorporativoController {
         gestor.setEmail(requestDto.getEmail());
         gestor.setSenha(requestDto.getSenha());
         gestor.setIdade(requestDto.getIdade());
-        gestor.setSexo(requestDto.getSexo());
+        gestor.setSexoBiologico(requestDto.getSexo());
         gestor.setIdGestor(requestDto.getIdGestor());
 
         GestorCorporativo salvo = gestorCorporativoService.cadastrar(gestor, requestDto.getIdEmpresa());
@@ -51,7 +51,7 @@ public class GestorCorporativoController {
         gestor.setEmail(requestDto.getEmail());
         gestor.setSenha(requestDto.getSenha());
         gestor.setIdade(requestDto.getIdade());
-        gestor.setSexo(requestDto.getSexo());
+        gestor.setSexoBiologico(requestDto.getSexo());
         gestor.setIdGestor(requestDto.getIdGestor());
 
         GestorCorporativo atualizado = gestorCorporativoService.editar(id, gestor, requestDto.getIdEmpresa());

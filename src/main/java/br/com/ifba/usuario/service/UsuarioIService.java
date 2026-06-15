@@ -10,6 +10,8 @@ public interface UsuarioIService {
     //Cadastrar
     Usuario cadastrar(Usuario usuario);
 
+    Usuario autenticarLogin(String email, String senha);
+
     //Editar
     Usuario editar(Long id, Usuario usuario);
 

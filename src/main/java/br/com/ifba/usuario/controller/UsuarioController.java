@@ -2,6 +2,7 @@ package br.com.ifba.usuario.controller;
 
 import br.com.ifba.infraestructure.util.ObjectMapperUtil;
 import br.com.ifba.usuario.dto.UsuarioGetResponseDto;
+import br.com.ifba.usuario.dto.UsuarioLoginRequestDTO;
 import br.com.ifba.usuario.dto.UsuarioPostRequestDto;
 import br.com.ifba.usuario.dto.VincularFuncionarioRequestDto;
 import br.com.ifba.usuario.entity.Usuario;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -31,7 +33,7 @@ public class UsuarioController {
         usuario.setEmail(requestDto.getEmail());
         usuario.setSenha(requestDto.getSenha());
         usuario.setIdade(requestDto.getIdade());
-        usuario.setSexo(requestDto.getSexo());
+        usuario.setSexoBiologico(requestDto.getSexoBiologico());
 
         //Passa a entidade e o id da Empresa pro Service
         Usuario salvo = usuarioService.cadastrar(usuario);
@@ -46,6 +48,17 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UsuarioLoginRequestDTO dados) {
+        Usuario usuarioLogado = usuarioService.autenticarLogin(dados.getEmail(), dados.getSenha());
+
+        if (usuarioLogado != null) {
+            return ResponseEntity.ok(usuarioLogado);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("E-mail ou senha incorretos!");
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioGetResponseDto> editar(
             @PathVariable Long id,
@@ -56,7 +69,7 @@ public class UsuarioController {
         usuario.setEmail(requestDto.getEmail());
         usuario.setSenha(requestDto.getSenha());
         usuario.setIdade(requestDto.getIdade());
-        usuario.setSexo(requestDto.getSexo());
+        usuario.setSexoBiologico(requestDto.getSexoBiologico());
 
         Usuario atualizado = usuarioService.editar(id, usuario);
 

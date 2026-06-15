@@ -82,7 +82,7 @@ public class GestorCorporativoService implements GestorCorporativoIService{
         gestorExistente.setNome(gestor.getNome());
         gestorExistente.setEmail(gestor.getEmail());
         gestorExistente.setIdade(gestor.getIdade());
-        gestorExistente.setSexo(gestor.getSexo());
+        gestorExistente.setSexoBiologico(gestor.getSexoBiologico());
         gestorExistente.setIdGestor(gestor.getIdGestor());
         gestorExistente.setEmpresa(empresa);
 
