@@ -6,6 +6,8 @@ import br.com.ifba.habito.dto.HabitoPutRequestDto;
 import br.com.ifba.habito.entity.Habito;
 import br.com.ifba.habito.service.HabitoIService;
 import br.com.ifba.infraestructure.util.ObjectMapperUtil;
+import br.com.ifba.usuario.entity.Usuario;
+import br.com.ifba.usuario.service.UsuarioIService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class HabitoController {
 
     private final HabitoIService habitoService;
+    private final UsuarioIService usuarioService;
 
     private ObjectMapperUtil objectMapperUtil;
 
@@ -46,6 +49,14 @@ public class HabitoController {
                 requestDto,
                 Habito.class
         );
+
+// Busca o usuário pelo ID enviado
+        Usuario usuario = usuarioService.buscarPorId(
+                requestDto.getUsuarioId()
+        );
+
+// Associa o usuário ao hábito
+        habito.setUsuario(usuario);
 
         Habito habitoSalvo = habitoService.save(habito);
 
