@@ -27,20 +27,24 @@ public class EmpresaService implements EmpresaIService {
     @Transactional
     public Empresa cadastrarEmpresa(Empresa empresa, Long gestorId) {
 
+        Usuario usuario = usuarioRepository.findById(gestorId)
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado."));
+
         //Verificação
         if (empresa.getNome() == null || empresa.getNome().trim().isEmpty()) {
             throw new BusinessException("O nome da Empresa é obrigatório");
         }
 
         if (empresaRepository.findByGestorId(gestorId).isPresent()) {
-            throw new IllegalStateException("Você já possui uma empresa cadastrada.");
+            throw new BusinessException("Você já possui uma empresa cadastrada.");
         }
         if (empresaRepository.existsByCnpj(empresa.getCnpj())) {
-            throw new IllegalStateException("CNPJ já cadastrado no sistema.");
-        }
-        else {
+            throw new BusinessException("CNPJ já cadastrado no sistema.");
+        } else {
             empresa.setGestorId(gestorId);
             empresa.setCodigoAcesso(gerarCodigoUnico());
+            usuario.setGestor(true);
+            usuarioRepository.save(usuario);
             return empresaRepository.save(empresa);
         }
     }
