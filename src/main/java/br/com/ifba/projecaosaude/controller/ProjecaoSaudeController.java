@@ -15,6 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/projecoes-saude")
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class ProjecaoSaudeController {
 
     private final ProjecaoSaudeIService projecaoSaudeService;
 
-    private ObjectMapperUtil objectMapperUtil;
+    private final ObjectMapperUtil objectMapperUtil;
 
     /**
      * @author João Victor
@@ -154,5 +156,33 @@ public class ProjecaoSaudeController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .build();
+    }
+
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<ProjecaoSaudeGetResponseDto> minhaProjecao(
+            @PathVariable Long usuarioId) {
+
+        ProjecaoSaude projecao = projecaoSaudeService.minhaProjecao(usuarioId);
+
+        ProjecaoSaudeGetResponseDto response =
+                objectMapperUtil.map(projecao, ProjecaoSaudeGetResponseDto.class);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/usuario/{usuarioId}/comparar")
+    public ResponseEntity<String> comparar(
+            @PathVariable Long usuarioId) {
+
+        return ResponseEntity.ok(projecaoSaudeService.comparar(usuarioId));
+    }
+
+    @GetMapping("/usuario/{usuarioId}/recomendacoes")
+    public ResponseEntity<List<String>> recomendacoes(
+            @PathVariable Long usuarioId) {
+
+        List<String> recomendacoes = projecaoSaudeService.recomendacoes(usuarioId);
+
+        return ResponseEntity.ok(recomendacoes);
     }
 }

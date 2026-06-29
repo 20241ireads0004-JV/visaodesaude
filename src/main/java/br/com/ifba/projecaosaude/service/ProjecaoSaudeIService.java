@@ -4,6 +4,8 @@ import br.com.ifba.projecaosaude.entity.ProjecaoSaude;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface ProjecaoSaudeIService {
 
     /*
@@ -33,4 +35,19 @@ public interface ProjecaoSaudeIService {
      * Atualiza os dados de uma projeção de saúde.
      */
     ProjecaoSaude update(Long id, ProjecaoSaude projecaoSaude);
+
+    /*
+     * Faz a projeção do Usuario.
+     */
+    ProjecaoSaude minhaProjecao(Long usuarioId);
+
+    /*
+     * Faz a comparação da projeção do Usuario.
+     */
+    String comparar(Long usuarioId);
+
+    /*
+     * Faz recomendação ao Usuario.
+     */
+    List<String> recomendacoes(Long usuarioId);
 }

@@ -11,143 +11,80 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/alertas")
+@RequestMapping("/alertas")
 @RequiredArgsConstructor
 public class AlertaController {
 
     private final AlertaIService alertaService;
+    private final ObjectMapperUtil objectMapperUtil;
 
-    private ObjectMapperUtil objectMapperUtil;
+    @PostMapping("/cadastrar")
+    public ResponseEntity<AlertaGetResponseDto> cadastrar(
+            @Valid @RequestBody AlertaPostRequestDto requestDto) {
 
-    /**
-     * @author João Victor
-     * @apiNote Endpoint criado desde a versão V1.0.1
-     * Lista de todos os alertas cadastrados na base de dados.
-     */
-
-    // =========================
-    // POST
-    // =========================
-    @PostMapping(
-            path = "/save",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<AlertaGetResponseDto> save(
-            @RequestBody @Valid AlertaPostRequestDto requestDto
-    ) {
-
-        Alerta alerta = ObjectMapperUtil.map(
-                requestDto,
-                Alerta.class
-        );
+        Alerta alerta = new Alerta();
+        alerta.setTipo(requestDto.getTipo());
+        alerta.setDescricao(requestDto.getDescricao());
+        alerta.setData(requestDto.getData());
+        alerta.setVisualizacao(requestDto.getVisualizacao());
 
         Alerta alertaSalvo = alertaService.save(alerta);
 
-        AlertaGetResponseDto responseDto = ObjectMapperUtil.map(
-                alertaSalvo,
-                AlertaGetResponseDto.class
-        );
+        AlertaGetResponseDto responseDto =
+                objectMapperUtil.map(alertaSalvo, AlertaGetResponseDto.class);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(responseDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    // =========================
-    // GET BY ID
-    // =========================
-    @GetMapping(
-            path = "/findById/{id}",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<AlertaGetResponseDto> findById(
-            @PathVariable Long id
-    ) {
-
-        AlertaGetResponseDto responseDto = ObjectMapperUtil.map(
-                alertaService.findById(id),
-                AlertaGetResponseDto.class
-        );
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(responseDto);
-    }
-
-    // =========================
-    // GET ALL
-    // =========================
-    @GetMapping(
-            path = "/findAll",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<Page<AlertaGetResponseDto>> findAll(
-            Pageable pageable
-    ) {
-
-        Page<AlertaGetResponseDto> responseDto =
-                alertaService.findAll(pageable)
-                        .map(alerta ->
-                                ObjectMapperUtil.map(
-                                        alerta,
-                                        AlertaGetResponseDto.class
-                                )
-                        );
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(responseDto);
-    }
-
-    // =========================
-    // PUT
-    // =========================
-    @PutMapping(
-            path = "/update/{id}",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<AlertaGetResponseDto> update(
+    @PutMapping("/{id}")
+    public ResponseEntity<AlertaGetResponseDto> editar(
             @PathVariable Long id,
-            @RequestBody @Valid AlertaPutRequestDto dto
-    ) {
+            @Valid @RequestBody AlertaPutRequestDto requestDto) {
 
-        Alerta alerta = ObjectMapperUtil.map(
-                dto,
-                Alerta.class
-        );
+        Alerta alerta = new Alerta();
+        alerta.setTipo(requestDto.getTipo());
+        alerta.setDescricao(requestDto.getDescricao());
+        alerta.setData(requestDto.getData());
+        alerta.setVisualizacao(requestDto.getVisualizacao());
 
-        Alerta alertaAtualizado = alertaService.update(
-                id,
-                alerta
-        );
+        Alerta atualizado = alertaService.update(id, alerta);
 
-        AlertaGetResponseDto responseDto = ObjectMapperUtil.map(
-                alertaAtualizado,
-                AlertaGetResponseDto.class
-        );
+        AlertaGetResponseDto responseDto =
+                objectMapperUtil.map(atualizado, AlertaGetResponseDto.class);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(responseDto);
+        return ResponseEntity.ok(responseDto);
     }
 
-    // =========================
-    // DELETE
-    // =========================
-    @DeleteMapping(
-            path = "/delete/{id}",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<Void> delete(
-            @PathVariable Long id
-    ) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
 
         alertaService.delete(id);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .build();
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/listar")
+    public ResponseEntity<Page<AlertaGetResponseDto>> listar(Pageable pageable) {
+
+        Page<AlertaGetResponseDto> lista = alertaService.findAll(pageable)
+                .map(alerta ->
+                        objectMapperUtil.map(alerta, AlertaGetResponseDto.class));
+
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AlertaGetResponseDto> buscarPorId(@PathVariable Long id) {
+
+        Alerta alerta = alertaService.findById(id);
+
+        AlertaGetResponseDto responseDto =
+                objectMapperUtil.map(alerta, AlertaGetResponseDto.class);
+
+        return ResponseEntity.ok(responseDto);
     }
 }

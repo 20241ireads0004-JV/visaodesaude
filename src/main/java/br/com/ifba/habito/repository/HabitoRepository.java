@@ -71,4 +71,5 @@ public interface HabitoRepository extends JpaRepository<Habito, Long> {
 
     List<Habito> findByUsuario_IdAndDataBetweenOrderByDataAsc(Long usuarioId, Date dataInicio, Date dataFim);
 
+    Optional<Habito> findFirstByUsuarioIdOrderByDataDesc(Long usuarioId);
 }
