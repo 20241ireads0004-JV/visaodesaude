@@ -1,6 +1,7 @@
 package br.com.ifba.projecaosaude.controller;
 
 import br.com.ifba.infraestructure.util.ObjectMapperUtil;
+import br.com.ifba.projecaosaude.dto.ComparacaoResponseDto;
 import br.com.ifba.projecaosaude.dto.ProjecaoSaudeGetResponseDto;
 import br.com.ifba.projecaosaude.dto.ProjecaoSaudePostRequestDto;
 import br.com.ifba.projecaosaude.dto.ProjecaoSaudePutRequestDto;
@@ -171,10 +172,11 @@ public class ProjecaoSaudeController {
     }
 
     @GetMapping("/usuario/{usuarioId}/comparar")
-    public ResponseEntity<String> comparar(
-            @PathVariable Long usuarioId) {
+    public ResponseEntity<ComparacaoResponseDto> comparar(
+            @PathVariable Long usuarioId){
 
-        return ResponseEntity.ok(projecaoSaudeService.comparar(usuarioId));
+        return ResponseEntity.ok(
+                projecaoSaudeService.comparar(usuarioId));
     }
 
     @GetMapping("/usuario/{usuarioId}/recomendacoes")

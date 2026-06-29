@@ -4,6 +4,7 @@ import br.com.ifba.habito.entity.Habito;
 import br.com.ifba.habito.repository.HabitoRepository;
 import br.com.ifba.infraestructure.exception.BusinessException;
 import br.com.ifba.infraestructure.exception.ResourceNotFoundException;
+import br.com.ifba.projecaosaude.dto.ComparacaoResponseDto;
 import br.com.ifba.projecaosaude.entity.ProjecaoSaude;
 import br.com.ifba.projecaosaude.repository.ProjecaoSaudeRepository;
 import br.com.ifba.usuario.repository.UsuarioRepository;
@@ -88,29 +89,33 @@ public class ProjecaoSaudeService implements ProjecaoSaudeIService {
     }
 
     @Override
-    public String comparar(Long usuarioId) {
+    public ComparacaoResponseDto comparar(Long usuarioId) {
 
-        List<ProjecaoSaude> projecoes = Collections.singletonList(minhaProjecao(usuarioId));
+        ProjecaoSaude projecao = minhaProjecao(usuarioId);
 
-        // Considera a projeção mais recente
-        ProjecaoSaude projecaoAtual = projecoes.get(projecoes.size() - 1);
+        int riscoAtual = projecao.getRiscoCardioVascular();
 
-        int riscoAtual = projecaoAtual.getRiscoCardioVascular();
         int riscoIdeal = 20;
 
+        String mensagem;
+
         if (riscoAtual == riscoIdeal) {
-            return "Parabéns! Sua projeção está no nível considerado ideal.";
+            mensagem = "Parabéns! Sua projeção está no nível ideal.";
+        }
+        else if (riscoAtual > riscoIdeal) {
+            mensagem = "Seu risco está " + (riscoAtual-riscoIdeal) + " pontos acima do ideal.";
+        }
+        else{
+            mensagem = "Seu risco está " + (riscoIdeal-riscoAtual) + " pontos abaixo do valor de referência.";
         }
 
-        if (riscoAtual > riscoIdeal) {
-            return "Seu risco cardiovascular está " +
-                    (riscoAtual - riscoIdeal) +
-                    " pontos acima do ideal.";
-        }
+        return new ComparacaoResponseDto(
+                riscoAtual,
+                riscoIdeal,
+                Math.abs(riscoAtual-riscoIdeal),
+                mensagem
+        );
 
-        return "Seu risco cardiovascular está " +
-                (riscoIdeal - riscoAtual) +
-                " pontos abaixo do valor de referência.";
     }
 
     @Override
