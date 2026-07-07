@@ -1,6 +1,7 @@
 package br.com.ifba.projecaosaude.service;
 
 import br.com.ifba.projecaosaude.dto.ComparacaoResponseDto;
+import br.com.ifba.projecaosaude.dto.RecomendacaoResponseDto;
 import br.com.ifba.projecaosaude.entity.ProjecaoSaude;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +41,7 @@ public interface ProjecaoSaudeIService {
     /*
      * Faz a projeção do Usuario.
      */
-    ProjecaoSaude minhaProjecao(Long usuarioId);
+    public List<ProjecaoSaude> minhaProjecao(Long usuarioId);
 
     /*
      * Faz a comparação da projeção do Usuario.
@@ -50,5 +51,5 @@ public interface ProjecaoSaudeIService {
     /*
      * Faz recomendação ao Usuario.
      */
-    List<String> recomendacoes(Long usuarioId);
+    public List<RecomendacaoResponseDto> recomendacoes(Long usuarioId);
 }

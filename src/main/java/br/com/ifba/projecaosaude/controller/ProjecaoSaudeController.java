@@ -1,10 +1,7 @@
 package br.com.ifba.projecaosaude.controller;
 
 import br.com.ifba.infraestructure.util.ObjectMapperUtil;
-import br.com.ifba.projecaosaude.dto.ComparacaoResponseDto;
-import br.com.ifba.projecaosaude.dto.ProjecaoSaudeGetResponseDto;
-import br.com.ifba.projecaosaude.dto.ProjecaoSaudePostRequestDto;
-import br.com.ifba.projecaosaude.dto.ProjecaoSaudePutRequestDto;
+import br.com.ifba.projecaosaude.dto.*;
 import br.com.ifba.projecaosaude.entity.ProjecaoSaude;
 import br.com.ifba.projecaosaude.service.ProjecaoSaudeIService;
 import jakarta.validation.Valid;
@@ -160,13 +157,36 @@ public class ProjecaoSaudeController {
     }
 
     @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<ProjecaoSaudeGetResponseDto> minhaProjecao(
+    public ResponseEntity<List<ProjecaoSaudeGetResponseDto>> minhaProjecao(
             @PathVariable Long usuarioId) {
 
-        ProjecaoSaude projecao = projecaoSaudeService.minhaProjecao(usuarioId);
+        List<ProjecaoSaude> lista =
+                projecaoSaudeService.minhaProjecao(usuarioId);
 
-        ProjecaoSaudeGetResponseDto response =
-                objectMapperUtil.map(projecao, ProjecaoSaudeGetResponseDto.class);
+        List<ProjecaoSaudeGetResponseDto> response =
+                lista.stream()
+                        .map(projecao -> {
+
+                            ProjecaoSaudeGetResponseDto dto =
+                                    new ProjecaoSaudeGetResponseDto();
+
+                            dto.setData(projecao.getData());
+
+                            dto.setAtual(
+                                    projecao.getRiscoCardioVascular());
+
+                            dto.setProjetado(
+                                    projecao.getRiscoCardioVascular());
+
+                            dto.setImc(null);
+
+                            dto.setSono("Não informado");
+
+                            dto.setEnergia("Não informado");
+
+                            return dto;
+                        })
+                        .toList();
 
         return ResponseEntity.ok(response);
     }
@@ -180,11 +200,10 @@ public class ProjecaoSaudeController {
     }
 
     @GetMapping("/usuario/{usuarioId}/recomendacoes")
-    public ResponseEntity<List<String>> recomendacoes(
+    public ResponseEntity<List<RecomendacaoResponseDto>> recomendacoes(
             @PathVariable Long usuarioId) {
 
-        List<String> recomendacoes = projecaoSaudeService.recomendacoes(usuarioId);
-
-        return ResponseEntity.ok(recomendacoes);
+        return ResponseEntity.ok(
+                projecaoSaudeService.recomendacoes(usuarioId));
     }
 }

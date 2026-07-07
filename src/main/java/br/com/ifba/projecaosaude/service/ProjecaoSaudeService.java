@@ -5,6 +5,7 @@ import br.com.ifba.habito.repository.HabitoRepository;
 import br.com.ifba.infraestructure.exception.BusinessException;
 import br.com.ifba.infraestructure.exception.ResourceNotFoundException;
 import br.com.ifba.projecaosaude.dto.ComparacaoResponseDto;
+import br.com.ifba.projecaosaude.dto.RecomendacaoResponseDto;
 import br.com.ifba.projecaosaude.entity.ProjecaoSaude;
 import br.com.ifba.projecaosaude.repository.ProjecaoSaudeRepository;
 import br.com.ifba.usuario.repository.UsuarioRepository;
@@ -73,25 +74,28 @@ public class ProjecaoSaudeService implements ProjecaoSaudeIService {
     }
 
     @Override
-    public ProjecaoSaude minhaProjecao(Long usuarioId) {
+    public List<ProjecaoSaude> minhaProjecao(Long usuarioId) {
 
         usuarioRepository.findById(usuarioId)
                 .orElseThrow(() ->
                         new BusinessException("Usuário não encontrado. ID: " + usuarioId));
 
-        List<ProjecaoSaude> projecoes = projecaoSaudeRepository.findByUsuario_Id(usuarioId);
+        List<ProjecaoSaude> projecoes =
+                projecaoSaudeRepository.findByUsuario_Id(usuarioId);
 
         if (projecoes.isEmpty()) {
-            throw new BusinessException("Nenhuma projeção de saúde encontrada para este usuário.");
+            throw new BusinessException("Nenhuma projeção encontrada.");
         }
 
-        return (ProjecaoSaude) projecoes;
+        return projecoes;
     }
 
     @Override
     public ComparacaoResponseDto comparar(Long usuarioId) {
 
-        ProjecaoSaude projecao = minhaProjecao(usuarioId);
+        List<ProjecaoSaude> projecoes = minhaProjecao(usuarioId);
+
+        ProjecaoSaude projecao = projecoes.get(projecoes.size() - 1);
 
         int riscoAtual = projecao.getRiscoCardioVascular();
 
@@ -101,68 +105,138 @@ public class ProjecaoSaudeService implements ProjecaoSaudeIService {
 
         if (riscoAtual == riscoIdeal) {
             mensagem = "Parabéns! Sua projeção está no nível ideal.";
-        }
-        else if (riscoAtual > riscoIdeal) {
-            mensagem = "Seu risco está " + (riscoAtual-riscoIdeal) + " pontos acima do ideal.";
-        }
-        else{
-            mensagem = "Seu risco está " + (riscoIdeal-riscoAtual) + " pontos abaixo do valor de referência.";
+        } else if (riscoAtual > riscoIdeal) {
+            mensagem = "Seu risco está " + (riscoAtual - riscoIdeal) + " pontos acima do ideal.";
+        } else {
+            mensagem = "Seu risco está " + (riscoIdeal - riscoAtual) + " pontos abaixo do valor de referência.";
         }
 
         return new ComparacaoResponseDto(
                 riscoAtual,
                 riscoIdeal,
-                Math.abs(riscoAtual-riscoIdeal),
+                Math.abs(riscoAtual - riscoIdeal),
                 mensagem
         );
-
     }
 
     @Override
-    public List<String> recomendacoes(Long usuarioId) {
+    public List<RecomendacaoResponseDto> recomendacoes(Long usuarioId) {
 
         usuarioRepository.findById(usuarioId)
                 .orElseThrow(() ->
                         new BusinessException("Usuário não encontrado."));
 
-        Habito habito = habitoRepository.findFirstByUsuarioIdOrderByDataDesc(usuarioId)
+        Habito habito = habitoRepository
+                .findFirstByUsuarioIdOrderByDataDesc(usuarioId)
                 .orElseThrow(() ->
                         new BusinessException("O usuário não possui hábitos cadastrados."));
 
-        List<String> recomendacoes = new ArrayList<>();
+        List<RecomendacaoResponseDto> recomendacoes = new ArrayList<>();
 
-        // Sono
+        // SONO
         if (habito.getHorasSono() < 7) {
-            recomendacoes.add("Procure dormir entre 7 e 9 horas por noite.");
+
+            recomendacoes.add(
+                    new RecomendacaoResponseDto(
+                            "Sono",
+                            "Durma mais",
+                            "Procure dormir entre 7 e 9 horas por noite.",
+                            "ALTA",
+                            "ALTO"
+                    )
+            );
         }
 
         if (habito.getQualidadeSono() < 7) {
-            recomendacoes.add("Crie uma rotina de sono, evitando telas antes de dormir.");
+
+            recomendacoes.add(
+                    new RecomendacaoResponseDto(
+                            "Sono",
+                            "Melhore a qualidade do sono",
+                            "Crie uma rotina de sono evitando telas antes de dormir.",
+                            "MEDIA",
+                            "MEDIO"
+                    )
+            );
         }
 
-        // Alimentação
+        // ALIMENTAÇÃO
+
         if (!habito.getAlimentacao().equalsIgnoreCase("Saudável")) {
-            recomendacoes.add("Prefira uma alimentação rica em frutas, verduras e legumes.");
-            recomendacoes.add("Reduza o consumo de alimentos ultraprocessados.");
+
+            recomendacoes.add(
+                    new RecomendacaoResponseDto(
+                            "Alimentacao",
+                            "Melhore sua alimentação",
+                            "Prefira frutas, verduras e legumes.",
+                            "ALTA",
+                            "ALTO"
+                    )
+            );
+
+            recomendacoes.add(
+                    new RecomendacaoResponseDto(
+                            "Alimentacao",
+                            "Evite ultraprocessados",
+                            "Reduza alimentos industrializados.",
+                            "MEDIA",
+                            "MEDIO"
+                    )
+            );
         }
 
-        // Exercícios
+        // EXERCÍCIOS
+
         if (habito.getExercicioDuracao() < 30) {
-            recomendacoes.add("Pratique pelo menos 30 minutos de atividade física diariamente.");
+
+            recomendacoes.add(
+                    new RecomendacaoResponseDto(
+                            "Exercicio",
+                            "Aumente o tempo de atividade",
+                            "Pratique pelo menos 30 minutos diariamente.",
+                            "ALTA",
+                            "ALTO"
+                    )
+            );
         }
 
         if (habito.getExercicioIntensidade() < 5) {
-            recomendacoes.add("Aumente gradualmente a intensidade dos exercícios, respeitando seus limites.");
+
+            recomendacoes.add(
+                    new RecomendacaoResponseDto(
+                            "Exercicio",
+                            "Aumente a intensidade",
+                            "Aumente gradualmente a intensidade dos exercícios.",
+                            "MEDIA",
+                            "MEDIO"
+                    )
+            );
         }
 
         if (habito.getExercicioTipo() == 0) {
-            recomendacoes.add("Inclua caminhadas, corridas, ciclismo ou musculação na sua rotina.");
+
+            recomendacoes.add(
+                    new RecomendacaoResponseDto(
+                            "Exercicio",
+                            "Inclua atividades físicas",
+                            "Inclua caminhada, corrida, ciclismo ou musculação.",
+                            "BAIXA",
+                            "MEDIO"
+                    )
+            );
         }
 
         if (recomendacoes.isEmpty()) {
-            recomendacoes.add("Parabéns! Seus hábitos estão alinhados com um estilo de vida saudável.");
-            recomendacoes.add("Continue mantendo uma alimentação equilibrada.");
-            recomendacoes.add("Mantenha sua rotina de exercícios físicos.");
+
+            recomendacoes.add(
+                    new RecomendacaoResponseDto(
+                            "Saúde",
+                            "Excelente trabalho",
+                            "Parabéns! Continue mantendo seus hábitos saudáveis.",
+                            "BAIXA",
+                            "BAIXO"
+                    )
+            );
         }
 
         return recomendacoes;

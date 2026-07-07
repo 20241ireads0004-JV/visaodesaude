@@ -15,15 +15,22 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ProjecaoSaudeGetResponseDto implements  Serializable {
 
-    @JsonProperty("riscoCardioVascular")
-    private int riscoCardioVascular;
-
-    @JsonProperty("descricao")
-    private String descricao;
-
     @JsonProperty("data")
     private LocalDate data;
 
-    @JsonProperty("visualizacao")
-    private Boolean visualizacao;
+    @JsonProperty("atual")
+    private Integer atual;
+
+    @JsonProperty("projetado")
+    private Integer projetado;
+
+    @JsonProperty("imc")
+    private Integer imc;
+
+    @JsonProperty("sono")
+    private String sono;
+
+    @JsonProperty("energia")
+    private String energia;
+
 }
