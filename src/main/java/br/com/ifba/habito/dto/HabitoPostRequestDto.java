@@ -54,4 +54,9 @@ public class HabitoPostRequestDto implements Serializable {
     @NotNull(message = "O usuário é obrigatório")
     @JsonProperty("usuarioId")
     private Long usuarioId;
+
+    @NotNull(message = "Água é obrigatória")
+    @Min(value = 0, message = "Água não pode ser negativa")
+    @JsonProperty("aguaCopos")
+    private Integer aguaCopos;
 }

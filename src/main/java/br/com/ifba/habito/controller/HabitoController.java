@@ -113,6 +113,28 @@ public class HabitoController {
                 .body(responseDto);
     }
 
+    @GetMapping(
+            path = "/hoje/{usuarioId}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<HabitoGetResponseDto> buscarHabitoHoje(
+            @PathVariable Long usuarioId
+    ) {
+
+        Habito habito = habitoService.buscarHabitoHoje(usuarioId);
+
+        if (habito == null) {
+            return ResponseEntity.noContent().build();
+        }
+
+        HabitoGetResponseDto response = ObjectMapperUtil.map(
+                habito,
+                HabitoGetResponseDto.class
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
     // =========================
     // PUT
     // =========================

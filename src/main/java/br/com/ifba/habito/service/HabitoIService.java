@@ -33,4 +33,6 @@ public interface HabitoIService {
      * Atualiza os dados de um habito.
      */
     Habito update(Long id, Habito habito);
+
+    public Habito buscarHabitoHoje(Long usuarioId);
 }

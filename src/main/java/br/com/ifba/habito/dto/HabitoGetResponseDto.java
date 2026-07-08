@@ -35,4 +35,7 @@ public class HabitoGetResponseDto implements Serializable {
 
     @JsonProperty("exercicioDuracao")
     private Integer exercicioDuracao;
+
+    @JsonProperty("aguaCopos")
+    private Integer aguaCopos;
 }

@@ -50,7 +50,15 @@ public class HabitoService implements HabitoIService {
         habitoAtual.setExercicioIntensidade(habito.getExercicioIntensidade());
         habitoAtual.setExercicioTipo(habito.getExercicioTipo());
         habitoAtual.setExercicioDuracao(habito.getExercicioDuracao());
+        habitoAtual.setAguaCopos(habito.getAguaCopos());
 
         return habitoRepository.save(habitoAtual);
+    }
+
+    @Override
+    public Habito buscarHabitoHoje(Long usuarioId) {
+        return habitoRepository
+                .findTopByUsuarioIdOrderByIdDesc(usuarioId)
+                .orElse(null);
     }
 }

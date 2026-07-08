@@ -44,4 +44,7 @@ public class Habito extends PersistenceEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
+
+    @Column(name = "agua_copos", nullable = false)
+    private int aguaCopos;
 }
