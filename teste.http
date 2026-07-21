@@ -1,0 +1,9 @@
+POST http://localhost:8080/alertas/cadastrar
+Content-Type: application/json
+
+{
+  "tipo": "ALTO",
+  "descricao": "Pressão elevada",
+  "data": "2026-07-21",
+  "visualizacao": false
+}

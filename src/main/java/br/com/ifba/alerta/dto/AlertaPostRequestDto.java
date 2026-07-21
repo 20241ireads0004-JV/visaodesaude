@@ -18,6 +18,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class AlertaPostRequestDto implements Serializable {
 
+    @NotNull(message = "O usuário é obrigatório.")
+    @JsonProperty("usuarioId")
+    private Long usuarioId;
+
     @NotBlank(message = "O tipo do alerta é obrigatório.")
     @Size(max = 50, message = "O tipo do alerta deve possuir no máximo 50 caracteres.")
     @JsonProperty("tipo")

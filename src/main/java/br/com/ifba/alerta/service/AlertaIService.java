@@ -4,6 +4,8 @@ import br.com.ifba.alerta.entity.Alerta;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface AlertaIService {
 
     /*
@@ -33,4 +35,6 @@ public interface AlertaIService {
      * Atualiza os dados de um alerta.
      */
     Alerta update(Long id, Alerta alerta);
+
+    public List<Alerta> buscarPorUsuario(Long usuarioId);
 }

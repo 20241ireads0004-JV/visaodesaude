@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AlertaService implements AlertaIService {
@@ -61,5 +63,10 @@ public class AlertaService implements AlertaIService {
         alertaExistente.setVisualizacao(alerta.getVisualizacao());
 
         return alertaRepository.save(alertaExistente);
+    }
+
+    @Override
+    public List<Alerta> buscarPorUsuario(Long usuarioId) {
+        return alertaRepository.findByUsuarioIdOrderByDataDesc(usuarioId);
     }
 }

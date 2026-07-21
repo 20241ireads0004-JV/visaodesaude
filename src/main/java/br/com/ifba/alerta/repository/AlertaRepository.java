@@ -12,4 +12,5 @@ public interface AlertaRepository extends JpaRepository<Alerta, Long> {
 
     List<Alerta> findByUsuario_IdAndDataBetween(Long usuarioId, LocalDate inicio, LocalDate fim);
 
+    List<Alerta> findByUsuarioIdOrderByDataDesc(Long usuarioId);
 }

@@ -25,7 +25,7 @@ public class HabitoController {
     private final HabitoIService habitoService;
     private final UsuarioIService usuarioService;
 
-    private ObjectMapperUtil objectMapperUtil;
+    private final ObjectMapperUtil objectMapperUtil;
 
     /**
      * @author João Victor
