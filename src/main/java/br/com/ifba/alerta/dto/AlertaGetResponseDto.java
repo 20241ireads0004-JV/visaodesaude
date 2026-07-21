@@ -15,6 +15,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class AlertaGetResponseDto implements Serializable {
 
+    @JsonProperty("id")
+    private Long id;
+
     @JsonProperty("tipo")
     private String tipo;
 
