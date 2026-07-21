@@ -47,4 +47,10 @@ public class Habito extends PersistenceEntity implements Serializable {
 
     @Column(name = "agua_copos", nullable = false)
     private int aguaCopos;
+
+    @Column(nullable = false)
+    private Double peso;
+
+    @Column(nullable = false)
+    private Double altura;
 }

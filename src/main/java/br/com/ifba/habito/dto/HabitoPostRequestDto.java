@@ -59,4 +59,12 @@ public class HabitoPostRequestDto implements Serializable {
     @Min(value = 0, message = "Água não pode ser negativa")
     @JsonProperty("aguaCopos")
     private Integer aguaCopos;
+
+    @NotNull(message = "O peso é obrigatório")
+    @JsonProperty("peso")
+    private Double peso;
+
+    @NotNull(message = "A altura é obrigatória")
+    @JsonProperty("altura")
+    private Double altura;
 }

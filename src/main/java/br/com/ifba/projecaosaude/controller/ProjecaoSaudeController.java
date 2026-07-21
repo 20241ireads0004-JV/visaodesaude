@@ -1,5 +1,7 @@
 package br.com.ifba.projecaosaude.controller;
 
+import br.com.ifba.habito.entity.Habito;
+import br.com.ifba.infraestructure.exception.BusinessException;
 import br.com.ifba.infraestructure.util.ObjectMapperUtil;
 import br.com.ifba.projecaosaude.dto.*;
 import br.com.ifba.projecaosaude.entity.ProjecaoSaude;
@@ -176,13 +178,26 @@ public class ProjecaoSaudeController {
                                     projecao.getRiscoCardioVascular());
 
                             dto.setProjetado(
-                                    projecao.getRiscoCardioVascular());
+                                    Math.max(
+                                            0,
+                                            projecao.getRiscoCardioVascular() - 5
+                                    )
+                            );
 
-                            dto.setImc(null);
+                            Double imc =
+                                    projecaoSaudeService.calcularImc(usuarioId);
 
-                            dto.setSono("Não informado");
+                            dto.setImc(
+                                    imc == null ? null : (int) Math.round(imc)
+                            );
 
-                            dto.setEnergia("Não informado");
+                            dto.setSono(
+                                    projecaoSaudeService.qualidadeSono(usuarioId)
+                            );
+
+                            dto.setEnergia(
+                                    projecaoSaudeService.energia(usuarioId)
+                            );
 
                             return dto;
                         })

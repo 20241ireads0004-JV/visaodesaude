@@ -241,4 +241,54 @@ public class ProjecaoSaudeService implements ProjecaoSaudeIService {
 
         return recomendacoes;
     }
+
+    @Override
+    public Double calcularImc(Long usuarioId) {
+
+        Habito habito = habitoRepository
+                .findFirstByUsuarioIdOrderByDataDesc(usuarioId)
+                .orElseThrow(() ->
+                        new BusinessException("Nenhum hábito encontrado."));
+
+        double imc =
+                habito.getPeso() /
+                        (habito.getAltura() * habito.getAltura());
+
+        return Math.round(imc * 10.0) / 10.0;
+    }
+
+    @Override
+    public String qualidadeSono(Long usuarioId) {
+
+        Habito habito = habitoRepository
+                .findFirstByUsuarioIdOrderByDataDesc(usuarioId)
+                .orElseThrow(() ->
+                        new BusinessException("Nenhum hábito encontrado."));
+
+        if (habito.getQualidadeSono() >= 3) {
+            return "Boa";
+        }
+
+        return "Ruim";
+    }
+
+    @Override
+    public String energia(Long usuarioId) {
+
+        Habito habito = habitoRepository
+                .findFirstByUsuarioIdOrderByDataDesc(usuarioId)
+                .orElseThrow(() ->
+                        new BusinessException("Nenhum hábito encontrado."));
+
+        if (habito.getExercicioDuracao() >= 60) {
+            return "Alta";
+        }
+
+        if (habito.getExercicioDuracao() >= 30) {
+            return "Média";
+        }
+
+        return "Baixa";
+    }
+
 }

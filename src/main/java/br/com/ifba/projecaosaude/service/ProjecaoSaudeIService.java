@@ -52,4 +52,10 @@ public interface ProjecaoSaudeIService {
      * Faz recomendação ao Usuario.
      */
     public List<RecomendacaoResponseDto> recomendacoes(Long usuarioId);
+
+    public Double calcularImc(Long usuarioId);
+
+    public String qualidadeSono(Long usuarioId);
+
+    public String energia(Long usuarioId);
 }

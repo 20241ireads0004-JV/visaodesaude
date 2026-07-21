@@ -50,4 +50,12 @@ public class HabitoPutRequestDto implements Serializable {
     @Min(value = 0, message = "A duração do exercício não pode ser negativa")
     @JsonProperty("exercicioDuracao")
     private Integer exercicioDuracao;
+
+    @NotNull(message = "O peso é obrigatório")
+    @JsonProperty("peso")
+    private Double peso;
+
+    @NotNull(message = "A altura é obrigatória")
+    @JsonProperty("altura")
+    private Double altura;
 }
