@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@CrossOrigin(origins = "*")
 public class ProjecaoSaudePutRequestDto implements  Serializable {
 
     @NotNull(message = "O risco cardiovascular é obrigatório.")
