@@ -80,14 +80,8 @@ public class ProjecaoSaudeService implements ProjecaoSaudeIService {
                 .orElseThrow(() ->
                         new BusinessException("Usuário não encontrado. ID: " + usuarioId));
 
-        List<ProjecaoSaude> projecoes =
-                projecaoSaudeRepository.findByUsuario_Id(usuarioId);
-
-        if (projecoes.isEmpty()) {
-            throw new BusinessException("Nenhuma projeção encontrada.");
-        }
-
-        return projecoes;
+        // Retorna a lista (se estiver vazia, retorna [] em vez de lançar exceção 400)
+        return projecaoSaudeRepository.findByUsuario_Id(usuarioId);
     }
 
     @Override
@@ -95,10 +89,19 @@ public class ProjecaoSaudeService implements ProjecaoSaudeIService {
 
         List<ProjecaoSaude> projecoes = minhaProjecao(usuarioId);
 
+        // Trata o caso onde o usuário ainda não possui nenhuma projeção cadastrada
+        if (projecoes.isEmpty()) {
+            return new ComparacaoResponseDto(
+                    0,
+                    20,
+                    20,
+                    "Nenhuma projeção encontrada. Cadastre seus hábitos para gerar sua primeira análise!"
+            );
+        }
+
         ProjecaoSaude projecao = projecoes.get(projecoes.size() - 1);
 
         int riscoAtual = projecao.getRiscoCardioVascular();
-
         int riscoIdeal = 20;
 
         String mensagem;
